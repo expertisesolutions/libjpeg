@@ -242,10 +242,17 @@ typedef unsigned int JDIMENSION;
 #define METHODDEF(type)		static type
 /* a function used only in its module: */
 #define LOCAL(type)		static type
-/* a function referenced thru EXTERNs: */
-#define GLOBAL(type)		type
+#if defined(_WIN32) && !defined(JPEG_STATIC)
 /* a reference to a GLOBAL function: */
+#define GLOBAL(type)		__declspec(dllexport) type
+/* a function referenced thru EXTERNs: */
+#define EXTERN(type)		__declspec(dllexport) extern type
+#else
+/* a reference to a GLOBAL function: */
+#define GLOBAL(type)		type
+/* a function referenced thru EXTERNs: */
 #define EXTERN(type)		extern type
+#endif
 
 
 /* This macro is used to declare a "method", that is, a function pointer.
